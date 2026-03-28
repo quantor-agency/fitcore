@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Membership | FitCore Gym</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600&family=Bebas+Neue&family=DM+Mono:wght@400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #080808;
+            --bg-card: rgba(255,255,255,0.03);
+            --card-border: rgba(249,115,22,0.2);
+            --orange: #f97316;
+            --neon-green: #22c55e;
+            --off-white: #f9fafb;
+            --muted: rgba(249,250,251,0.55);
+            --glow-orange: 0 0 30px rgba(249,115,22,0.45);
+            --glow-green: 0 0 25px rgba(34,197,94,0.3);
+        }
+
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        body {
+            font-family: 'Barlow', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--off-white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-weight: 400;
+            line-height: 1;
+            letter-spacing: 0.02em;
+        }
+
+        h1 {
+            font-size: clamp(40px, 8vw, 72px);
+        }
+
+        h2 {
+            font-size: clamp(32px, 5vw, 56px);
+        }
+
+        h3 {
+            font-size: clamp(24px, 3vw, 32px);
+        }
+
+        .label {
+            font-family: 'DM Mono', monospace;
+            font-size: 13px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .muted {
+            color: var(--muted);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 36px;
+            font-family: 'Barlow', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            outline: none;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .btn:focus-visible {
+            outline: 2px solid var(--orange);
+            outline-offset: 2px;
+        }
+
+        .btn-primary {
+            background: var(--orange);
+            color: var(--bg-dark);
+            box-shadow: var(--glow-orange);
+        }
+
+        .btn-primary:hover {
+            background: #fb923c;
+            box-shadow: 0 0 50px rgba(249,115,22,0.6);
+            transform: translateY(-3px);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--orange);
+            border: 2px solid var(--orange);
+        }
+
+        .btn-ghost:hover {
+            background: rgba(249,115,22,0.1);
+            box-shadow: var(--glow-orange);
+            transform: translateY(-3px);
+        }
+
+        .btn-small {
+            padding: 12px 24px;
+            font-size: 14px;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(8,8,8,0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 16px 40px;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 36px;
+            color: var(--orange);
+            text-decoration: none;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            text-shadow: var(--glow-orange);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--off-white);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 400;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--orange);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--orange);
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 28px;
+            height: 2px;
+            background: var(--orange);
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        #hero-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 800px;
+            padding: 120px 20px 60px;
+        }
+
+        .hero-title {
+            margin-bottom: 16px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 0.7s ease 0.2s forwards;
+        }
+
+        .hero-subtitle {
+            font-size: clamp(16px, 2.2vw, 20px);
+            font-weight: 400;
+            color: var(--muted);
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 0.7s ease 0.4s forwards;
+        }
+
+        /* Sections */
+        .section {
+            padding: 80px 40px;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-title {
+            margin-bottom: 12px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Pricing Cards */
+        .pricing-section {
+            background: linear-gradient(180deg, var(--bg-dark) 0%, rgba(249,115,22,0.03) 50%, var(--bg-dark) 100%);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            align-items: start;
+        }
+
+        .pricing-card {
+            background: var(--bg-card);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 40px 32px;
+            position: relative;
+            transition: all 0.4s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .pricing-card.featured {
+            border-color: var(--orange);
+            box-shadow: var(--glow-orange);
+            transform: scale(1.05);
+            z-index: 2;
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-8px);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 6px 20px;
+            background: var(--orange);
+            color: var(--bg-dark);
+            font-family: 'DM Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-radius: 4px;
+            box-shadow: var(--glow-orange);
+        }
+
+        .plan-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 32px;
+            margin-bottom: 16px;
+            color: var(--off-white);
+        }
+
+        .plan-price {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 64px;
+            color: var(--off-white);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .plan-price span {
+            font-size: 28px;
+            vertical-align: top;
+        }
+
+        .plan-period {
+            font-family: 'DM Mono', monospace;
+            font-size: 14px;
+            color: var(--neon-green);
+            margin-bottom: 32px;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-bottom: 32px;
+        }
+
+        .plan-features li {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--card-border);
+            font-size: 15px;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .plan-features li:last-child {
+            border-bottom: none;
+        }
+
+        .plan-features li svg {
+            width: 18px;
+            height: 18px;
+            color: var(--neon-green);
+            flex-shrink: 0;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-card);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 20px 24px;
+            text-align: center;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .comparison-table th {
+            background: rgba(249,115,22,0.1);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 20px;
+            color: var(--off-white);
+        }
+
+        .comparison-table th:first-child {
+            text-align: left;
+            background: transparent;
+        }
+
+        .comparison-table td {
+            font-size: 15px;
+            color: var(--muted);
+        }
+
+        .comparison-table td:first-child {
+            text-align: left;
+            color: var(--off-white);
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table .check {
+            color: var(--neon-green);
+        }
+
+        .comparison-table .dash {
+            color: var(--orange);
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* FAQ Accordion */
+        .faq-section {
+            background: linear-gradient(180deg, var(--bg-dark) 0%, rgba(34,197,94,0.03) 50%, var(--bg-dark) 100%);
+        }
+
+        .faq-list {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            margin-bottom: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item.active {
+            border-left: 3px solid var(--orange);
+            border-color: rgba(249,115,22,0.3);
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 24px 28px;
+            background: none;
+            border: none;
+            color: var(--off-white);
+            font-family: 'Barlow', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: color 0.3s ease;
+        }
+
+        .faq-question:hover {
+            color: var(--orange);
+        }
+
+        .faq-icon {
+            width: 20px;
+            height: 20px;
+            color: var(--orange);
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .faq-answer-content {
+            padding: 0 28px 24px;
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.7;
+        }
+
+        /* CTA Banner */
+        .cta-banner {
+            background: linear-gradient(135deg, var(--orange) 0%, var(--neon-green) 100%);
+            padding: 80px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(249,115,22,0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 50%, rgba(34,197,94,0.3) 0%, transparent 50%);
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-title {
+            color: var(--bg-dark);
+            margin-bottom: 32px;
+        }
+
+        .cta-banner .btn {
+            background: var(--bg-dark);
+            color: var(--orange);
+            border: none;
+            box-shadow: none;
+        }
+
+        .cta-banner .btn:hover {
+            background: var(--off-white);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-dark);
+            padding: 80px 40px 40px;
+            border-top: 1px solid var(--card-border);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 60px;
+            margin-bottom: 60px;
+        }
+
+        .footer-logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 48px;
+            color: var(--orange);
+            margin-bottom: 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .footer-tagline {
+            color: var(--muted);
+            font-size: 16px;
+            max-width: 300px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--off-white);
+            text-decoration: none;
+            font-size: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--orange);
+        }
+
+        .footer-divider {
+            height: 1px;
+            background: var(--card-border);
+            margin-bottom: 32px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+        }
+
+        .footer-credit {
+            font-family: 'DM Mono', monospace;
+            font-size: 12px;
+            color: var(--orange);
+            opacity: 0.7;
+        }
+
+        .footer-credit a {
+            color: var(--orange);
+            text-decoration: none;
+        }
+
+        .footer-credit a:hover {
+            text-decoration: underline;
+        }
+
+        /* Animations */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 72px;
+            left: 0;
+            right: 0;
+            background: rgba(8,8,8,0.98);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 40px;
+            border-bottom: 1px solid var(--card-border);
+            z-index: 999;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .mobile-menu ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .mobile-menu a {
+            color: var(--off-white);
+            text-decoration: none;
+            font-size: 18px;
+            transition: color 0.3s ease;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--orange);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+
+            .pricing-card.featured {
+                transform: none;
+            }
+
+            .pricing-card.featured:hover {
+                transform: translateY(-8px);
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 16px 12px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 16px 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .section {
+                padding: 60px 20px;
+            }
+
+            .footer-top {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .plan-price {
+                font-size: 48px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                font-size: 28px;
+            }
+
+            .pricing-card {
+                padding: 32px 24px;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 12px 8px;
+                font-size: 12px;
+            }
+
+            .faq-question {
+                padding: 20px;
+                font-size: 15px;
+            }
+
+            .faq-answer-content {
+                padding: 0 20px 20px;
+            }
+
+            .cta-banner {
+                padding: 60px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+        <a href="fitcore-index.html" class="logo">FITCORE</a>
+        <ul class="nav-links">
+            <li><a href="fitcore-index.html">Home</a></li>
+            <li><a href="fitcore-classes.html">Classes</a></li>
+            <li><a href="fitcore-membership.html" class="active">Membership</a></li>
+            <li><a href="fitcore-trainers.html">Trainers</a></li>
+            <li><a href="fitcore-contact.html">Contact</a></li>
+            <li><a href="fitcore-membership.html" class="btn btn-primary btn-small">Join Now</a></li>
+        </ul>
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="fitcore-index.html">Home</a></li>
+            <li><a href="fitcore-classes.html">Classes</a></li>
+            <li><a href="fitcore-membership.html">Membership</a></li>
+            <li><a href="fitcore-trainers.html">Trainers</a></li>
+            <li><a href="fitcore-contact.html">Contact</a></li>
+            <li><a href="fitcore-membership.html" class="btn btn-primary">Join Now</a></li>
+        </ul>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <canvas id="hero-canvas" aria-hidden="true"></canvas>
+        <div class="hero-content">
+            <h1 class="hero-title">Pick Your Plan. Own Your Results.</h1>
+            <p class="hero-subtitle">No contracts on monthly plans. Cancel anytime.</p>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="section pricing-section" id="pricing">
+        <div class="container">
+            <div class="section-header reveal">
+                <p class="label" style="color: var(--orange);">Membership Plans</p>
+                <h2 class="section-title">CHOOSE YOUR PATH</h2>
+            </div>
+
+            <div class="pricing-grid">
+                <!-- Basic Plan -->
+                <div class="pricing-card reveal" data-delay="0">
+                    <h3 class="plan-name">Basic</h3>
+                    <div class="plan-price"><span>$</span>39</div>
+                    <p class="plan-period">per month</p>
+                    <ul class="plan-features">
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Gym Access (6AM–10PM)
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 13l4 4L19 7"/>
+                            </svg>
+                            2 Group Classes/Week
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Locker Access
+                        </li>
+                    </ul>
+                    <a href="fitcore-contact.html" class="btn btn-ghost btn-full">Join Basic</a>
+                </div>
+
+                <!-- Elite Plan (Featured) -->
+                <div class="pricing-card featured reveal" data-delay="100">
+                    <span class="popular-badge">Most Popular</span>
+                    <h3 class="plan-name">Elite</h3>
+                    <div class="plan-price"><span>$</span>69</div>
+                    <p class="plan-period">per month</p>
+                    <ul class="plan-features">
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 13l4 4L19 7"/>
+                            </svg>
+                            24/7 Gym Access
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Unlimited Group Classes
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 13l4 4L19 7"/>
+                            </svg>
+                            1 Personal Training Session/Month
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Nutrition Guide
+                        </li>
+                    </ul>
+                    <a href="fitcore-contact.html" class="btn btn-primary btn-full">Join Elite</a>
+                </div>
+
+                <!-- Pro Plan -->
+                <div class="pricing-card reveal" data-delay="200">
+                    <h3 class="plan-name">Pro</h3>
+                    <div class="plan-price"><span>$</span>99</div>
+                    <p class="plan-period">per month</p>
+                    <ul class="plan-features">
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Everything in Elite
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 13l4 4L19 7"/>
+                            </svg>
+                            4 Personal Training Sessions/Month
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Custom Meal Plan
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Priority Booking
+                        </li>
+                    </ul>
+                    <a href="fitcore-contact.html" class="btn btn-ghost btn-full">Join Pro</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Table -->
+    <section class="section" id="compare">
+        <div class="container">
+            <div class="section-header reveal">
+                <p class="label" style="color: var(--neon-green);">At a Glance</p>
+                <h2 class="section-title">COMPARE PLANS</h2>
+            </div>
+
+            <div class="table-responsive reveal" data-delay="100">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Features</th>
+                            <th>Basic</th>
+                            <th>Elite</th>
+                            <th>Pro</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Gym Access</td>
+                            <td>6AM–10PM</td>
+                            <td>24/7</td>
+                            <td>24/7</td>
+                        </tr>
+                        <tr>
+                            <td>Group Classes</td>
+                            <td>2/Week</td>
+                            <td>Unlimited</td>
+                            <td>Unlimited</td>
+                        </tr>
+                        <tr>
+                            <td>Personal Training</td>
+                            <td class="dash">—</td>
+                            <td>1/Month</td>
+                            <td>4/Month</td>
+                        </tr>
+                        <tr>
+                            <td>Nutrition Guide</td>
+                            <td class="dash">—</td>
+                            <td class="check">Included</td>
+                            <td class="check">Included</td>
+                        </tr>
+                        <tr>
+                            <td>Custom Meal Plan</td>
+                            <td class="dash">—</td>
+                            <td class="dash">—</td>
+                            <td class="check">Included</td>
+                        </tr>
+                        <tr>
+                            <td>Priority Booking</td>
+                            <td class="dash">—</td>
+                            <td class="dash">—</td>
+                            <td class="check">Included</td>
+                        </tr>
+                        <tr>
+                            <td>Locker Access</td>
+                            <td class="check">Included</td>
+                            <td class="check">Included</td>
+                            <td class="check">Premium</td>
+                        </tr>
+                        <tr>
+                            <td>Guest Passes</td>
+                            <td class="dash">—</td>
+                            <td>2/Month</td>
+                            <td>4/Month</td>
+                        </tr>
+                        <tr>
+                            <td>Freeze Option</td>
+                            <td class="check">Available</td>
+                            <td class="check">Available</td>
+                            <td class="check">Available</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="section faq-section" id="faq">
+        <div class="container">
+            <div class="section-header reveal">
+                <p class="label" style="color: var(--orange);">Got Questions?</p>
+                <h2 class="section-title">FREQUENTLY ASKED</h2>
+            </div>
+
+            <div class="faq-list reveal" data-delay="100">
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        Can I cancel my membership anytime?
+                        <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p class="faq-answer-content">Yes! All monthly plans have no long-term contracts. You can cancel anytime with 30 days notice. No hidden fees, no questions asked. Annual plans offer a discount but require a 12-month commitment.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        Can I freeze my membership if I'm away?
+                        <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p class="faq-answer-content">Absolutely. You can freeze your membership for up to 3 months per year at no additional cost. Perfect for travel, injury recovery, or personal commitments. Just give us 7 days notice before your freeze date.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        Is there a joining fee or initiation fee?
+                        <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p class="faq-answer-content">We occasionally waive the $49 joining fee during promotional periods. Check with our team for current offers. Elite and Pro members always have the joining fee waived as part of their benefits.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        Can I upgrade or downgrade my plan?
+                        <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p class="faq-answer-content">Yes, you can change your plan at any time. Upgrades take effect immediately with prorated billing. Downgrades take effect at your next billing cycle. Contact our team to make changes to your membership.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        Do you offer corporate or group discounts?
+                        <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p class="faq-answer-content">We offer special rates for corporate partnerships, groups of 5 or more, students, military personnel, and first responders. Contact us with details about your organization or group for a custom quote.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question" aria-expanded="false">
+                        What happens to unused personal training sessions?
+                        <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div class="faq-answer">
+                        <p class="faq-answer-content">Included personal training sessions from Elite and Pro plans do not roll over to the next month. However, you can schedule them anytime within your billing cycle. Additional sessions can be purchased at member rates.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Banner -->
+    <section class="cta-banner">
+        <div class="cta-content reveal">
+            <h2 class="cta-title">YOUR FIRST CLASS IS ON US</h2>
+            <a href="fitcore-contact.html" class="btn">Claim Free Class</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-top">
+                <div>
+                    <a href="fitcore-index.html" class="footer-logo">FITCORE</a>
+                    <p class="footer-tagline">Where champions are made. Join the community that pushes you to be your best.</p>
+                </div>
+                <ul class="footer-links">
+                    <li><a href="fitcore-index.html">Home</a></li>
+                    <li><a href="fitcore-classes.html">Classes</a></li>
+                    <li><a href="fitcore-membership.html">Membership</a></li>
+                    <li><a href="fitcore-trainers.html">Trainers</a></li>
+                    <li><a href="fitcore-contact.html">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-divider"></div>
+            <div class="footer-bottom">
+                <p class="footer-credit">Demo site built by <a href="https://quantor-agency.github.io/" target="_blank" rel="noopener">QUANTOR</a> — quantor-agency.github.io/</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Initialize variables first
+        let scene, camera, renderer, particleSystem = null;
+        let mouseX = 0, mouseY = 0;
+        let targetMouseX = 0, targetMouseY = 0;
+        let animationId = null;
+        let particleData = [];
+        
+        // Check for reduced motion preference
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // Three.js Hero Background
+        function initThreeJS() {
+            const canvas = document.getElementById('hero-canvas');
+            if (!canvas) return;
+
+            scene = new THREE.Scene();
+            
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 50;
+
+            renderer = new THREE.WebGLRenderer({ 
+                canvas: canvas, 
+                antialias: true, 
+                alpha: true 
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+            const particleCount = 150;
+            
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const colors = new Float32Array(particleCount * 3);
+            
+            const orangeColor = new THREE.Color(0xf97316);
+            const greenColor = new THREE.Color(0x22c55e);
+            
+            for (let i = 0; i < particleCount; i++) {
+                positions[i * 3] = (Math.random() - 0.5) * 120;
+                positions[i * 3 + 1] = (Math.random() - 0.5) * 80;
+                positions[i * 3 + 2] = (Math.random() - 0.5) * 60;
+                
+                const colorChoice = Math.random() > 0.5 ? orangeColor : greenColor;
+                colors[i * 3] = colorChoice.r;
+                colors[i * 3 + 1] = colorChoice.g;
+                colors[i * 3 + 2] = colorChoice.b;
+                
+                particleData.push({
+                    velocity: new THREE.Vector3(
+                        (Math.random() - 0.5) * 0.4,
+                        (Math.random() - 0.5) * 0.4,
+                        (Math.random() - 0.5) * 0.2
+                    )
+                });
+            }
+            
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const material = new THREE.PointsMaterial({
+                size: 1.5,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.8,
+                blending: THREE.AdditiveBlending,
+                sizeAttenuation: true
+            });
+
+            particleSystem = new THREE.Points(geometry, material);
+            scene.add(particleSystem);
+
+            document.addEventListener('mousemove', onMouseMove);
+            window.addEventListener('resize', onWindowResize);
+            
+            if (!prefersReducedMotion) {
+                animate();
+            } else {
+                renderer.render(scene, camera);
+            }
+        }
+
+        function onMouseMove(event) {
+            targetMouseX = (event.clientX / window.innerWidth) * 2 - 1;
+            targetMouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+        }
+
+        function onWindowResize() {
+            if (!camera || !renderer) return;
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            animationId = requestAnimationFrame(animate);
+            
+            mouseX += (targetMouseX - mouseX) * 0.05;
+            mouseY += (targetMouseY - mouseY) * 0.05;
+
+            if (particleSystem && particleData.length > 0) {
+                const positions = particleSystem.geometry.attributes.position.array;
+                const time = Date.now() * 0.001;
+
+                for (let i = 0; i < particleData.length; i++) {
+                    const data = particleData[i];
+                    
+                    positions[i * 3] += data.velocity.x;
+                    positions[i * 3 + 1] += data.velocity.y;
+                    positions[i * 3 + 2] += data.velocity.z;
+                    
+                    positions[i * 3] += Math.sin(time + i * 0.1) * 0.02;
+                    positions[i * 3 + 1] += Math.cos(time + i * 0.15) * 0.02;
+                    
+                    if (positions[i * 3] > 60) positions[i * 3] = -60;
+                    if (positions[i * 3] < -60) positions[i * 3] = 60;
+                    if (positions[i * 3 + 1] > 40) positions[i * 3 + 1] = -40;
+                    if (positions[i * 3 + 1] < -40) positions[i * 3 + 1] = 40;
+                    if (positions[i * 3 + 2] > 30) positions[i * 3 + 2] = -30;
+                    if (positions[i * 3 + 2] < -30) positions[i * 3 + 2] = 30;
+                    
+                    positions[i * 3] += mouseX * 0.3;
+                    positions[i * 3 + 1] += mouseY * 0.3;
+                }
+                
+                particleSystem.geometry.attributes.position.needsUpdate = true;
+            }
+
+            camera.position.x += (mouseX * 8 - camera.position.x) * 0.02;
+            camera.position.y += (mouseY * 6 - camera.position.y) * 0.02;
+            camera.lookAt(scene.position);
+
+            renderer.render(scene, camera);
+        }
+
+        // Navigation
+        function initNavigation() {
+            const navbar = document.getElementById('navbar');
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            if (!navbar || !hamburger || !mobileMenu) return;
+
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('scrolled');
+                } else {
+                    navbar.classList.remove('scrolled');
+                }
+            });
+
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                mobileMenu.classList.toggle('show');
+                hamburger.setAttribute('aria-expanded', hamburger.classList.contains('active'));
+            });
+
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    mobileMenu.classList.remove('show');
+                    hamburger.setAttribute('aria-expanded', 'false');
+                });
+            });
+        }
+
+        // Scroll reveal
+        function initScrollReveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const delay = entry.target.dataset.delay || 0;
+                        setTimeout(() => {
+                            entry.target.classList.add('visible');
+                        }, parseInt(delay));
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+            reveals.forEach(reveal => observer.observe(reveal));
+        }
+
+        // FAQ Accordion
+        function initFAQ() {
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                const answer = item.querySelector('.faq-answer');
+                const answerContent = item.querySelector('.faq-answer-content');
+                
+                question.addEventListener('click', () => {
+                    const isActive = item.classList.contains('active');
+                    
+                    // Close all other items
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item) {
+                            otherItem.classList.remove('active');
+                            otherItem.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+                            otherItem.querySelector('.faq-answer').style.maxHeight = '0';
+                        }
+                    });
+                    
+                    // Toggle current item
+                    if (isActive) {
+                        item.classList.remove('active');
+                        question.setAttribute('aria-expanded', 'false');
+                        answer.style.maxHeight = '0';
+                    } else {
+                        item.classList.add('active');
+                        question.setAttribute('aria-expanded', 'true');
+                        answer.style.maxHeight = answerContent.scrollHeight + 24 + 'px';
+                    }
+                });
+            });
+        }
+
+        // 3D tilt effect on pricing cards
+        function initTiltEffect() {
+            if (prefersReducedMotion) return;
+            
+            const cards = document.querySelectorAll('.pricing-card');
+            
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const rotateX = (y - centerY) / 30;
+                    const rotateY = (centerX - x) / 30;
+                    
+                    const currentTransform = card.classList.contains('featured') ? 'scale(1.05)' : '';
+                    card.style.transform = `${currentTransform} perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    if (card.classList.contains('featured')) {
+                        card.style.transform = 'scale(1.05)';
+                    } else {
+                        card.style.transform = '';
+                    }
+                });
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initThreeJS();
+            initNavigation();
+            initScrollReveal();
+            initFAQ();
+            initTiltEffect();
+        });
+
+        window.addEventListener('beforeunload', () => {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+        });
+    </script>
+</body>
+</html>
